@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+   
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/swiper@8/swiper-bundle.min.css"
+/>
+
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+    <style>
+        .swal2-image {
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div v-for="item in popupImages">
+            <!-- <img :src="item.image_url" alt="" srcset=""> -->
+        </div>
+    </div>
+
+
+</body>
+
+<script> 
+const brandId = '60af2a8d36176f0011ec68ce'
+const API_URL = 'https://api-players.xgambet.com'
+new Vue({
+        el: '#app',
+        data() {
+            return {
+                popupImages: []
+            }
+        },
+        mounted() {
+            this.fetchPopupImages()
+        },
+        methods: {
+            async fetchPopupImages() {
+                try {
+                    const { data } = await axios.get(API_URL + '/promotes?status=1&type_promote=1&$sort[order]=1&brands_id=' + brandId)
+                    this.popupImages = data.data
+                    if(this.popupImages.length) {
+                        Swal.fire({
+                            title: '',
+                            text: '',
+                            imageUrl: this.popupImages[0].image_url,
+                            // imageWidth: 400,
+                            // imageHeight: 400,
+                            padding: '1em',
+                            imageAlt: '',
+                            confirmButtonText: 'ปิด'
+                        })
+                    }
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+        }
+    })
+
+</script>
+
+</html>
